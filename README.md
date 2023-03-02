@@ -6,5 +6,4 @@ This repository contains the source code for the paper [Face-Periocular Cross-Id
 
 ### Dataset
 We use the Cross-modal Face-periocular Dataset to train the proposed model, which are available as follows:
-- [Cross-modal Face-periocular]([https://shapenet.org/](https://www.kaggle.com/datasets/leslietiong/cmfpdb))
-- 
+- [Cross-modal Face-periocular](https://shapenet.org/](https://www.kaggle.com/datasets/leslietiong/cmfpdb)
