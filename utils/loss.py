@@ -51,9 +51,8 @@ class LargeMarginSoftmax(nn.CrossEntropyLoss):
 
 
 class total_LargeMargin_CrossEntropy(nn.Module):
-    def __init__(self, alpha=0.9):
+    def __init__(self):
         super(total_LargeMargin_CrossEntropy, self).__init__()
-        self.alpha = alpha
         self.loss1 = LargeMarginSoftmax()
         self.loss2 = LargeMarginSoftmax()
 
@@ -61,7 +60,7 @@ class total_LargeMargin_CrossEntropy(nn.Module):
         s1_loss = self.loss1(s1, target)
         s2_loss = self.loss2(s2, target)
 
-        total_loss = (s1_loss * self.alpha) + (s2_loss * self.alpha)
+        total_loss = s1_loss + s2_loss
 
         return total_loss
 
