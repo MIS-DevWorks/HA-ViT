@@ -42,7 +42,7 @@ def training():
                    num_classes_list=(config.num_sub_classes, config.num_enth_classes, config.num_gender_classes),
                    layer_depth=config.layer_depth, num_heads=config.num_heads, mlp_ratio=config.mlp_ratio,
                    norm_layer=None, drop_rate=config.drop_rate, attn_drop_rate=config.attn_drop_rate,
-                   drop_path_rate=config.drop_path_rate, reuse_classifier=config.reuse_classifier).to(config.device)
+                   drop_path_rate=config.drop_path_rate).to(config.device)
     if config.optimizer == "SGD":
         optimizer = torch.optim.SGD(model.parameters(), lr=config.init_lr, momentum=config.momentum,
                                     weight_decay=config.weight_decay)
@@ -63,7 +63,7 @@ def training():
     if config.pretrained_weights is not None:
         print("Loading Pretrained Model")
         model.load_state_dict(torch.load(config.pretrained_weights, map_location=config.device), strict=True)
-
+    
     # Training
     train_data_loader = DataLoader(train_dataset, batch_size=config.batch_size, shuffle=True, num_workers=2)
     valid_data_loader = DataLoader(valid_dataset, batch_size=config.batch_size, shuffle=False, num_workers=2)
@@ -87,3 +87,14 @@ def training():
         print("    [Train] loss: {:.4f}, \nacc: {}\n".format(train_loss, train_acc_dict))
         print("    [Valid] loss: {:.4f},\nacc: {}\n".format(valid_loss, valid_acc_dict))
         print("    [BEST] acc: {}".format(cur_acc_dict))
+        
+
+def crossmodal_evaluation():
+    pass
+
+if  __name__ == "__main__":
+    # training()
+    crossmodal_evaluation()
+    
+    
+    

@@ -4,7 +4,7 @@ from datetime import datetime
 #   Path
 dataset_path                            = '/media/leslie/samsung/Biometrics/learning dataset/'
 save_dir                                = 'experiments/{}'.format(datetime.now().strftime("%Y%m%d_%H%M%S"))
-pretrained_weights                      = None
+pretrained_weights                      = './checkpoints/HA-ViT.pt'
 pretrained                              = False
 
 
@@ -27,8 +27,6 @@ norm_layer                              = None
 drop_rate                               = 0.1
 attn_drop_rate                          = 0.
 drop_path_rate                          = 0.
-reuse_classifier                        = False
-network_type                            = "concat"
 
 
 #   Training

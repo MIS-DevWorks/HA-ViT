@@ -54,7 +54,7 @@ def train(data_loader, model, loss_fn, loss_fn2, optimizer, epoch, writer, confi
         writer.add_scalar("train/{}/ethn_acc".format(key), train_acc_dict[key]["ethnic"], epoch)
         writer.add_scalar("train/{}/gend_acc".format(key), train_acc_dict[key]["gender"], epoch)
 
-    total_loss = torch.mean(torch.tensor(loss_crossEntropy_KD))
+    total_loss = torch.mean(torch.tensor(loss_crossEntropy))
     writer.add_scalar("train/total_loss", total_loss, epoch)
 
     return total_loss, train_acc_dict
@@ -109,7 +109,7 @@ def valid(data_loader, model, loss_fn, loss_fn2, epoch, writer, config):
         writer.add_scalar("valid/{}/ethn_acc".format(key), val_acc_dict[key]["ethnic"], epoch)
         writer.add_scalar("valid/{}/gend_acc".format(key), val_acc_dict[key]["gender"], epoch)
 
-    total_loss = torch.mean(torch.tensor(loss_crossEntropy_KD))
+    total_loss = torch.mean(torch.tensor(loss_crossEntropy))
 
     writer.add_scalar("valid/total_loss", total_loss, epoch)
 

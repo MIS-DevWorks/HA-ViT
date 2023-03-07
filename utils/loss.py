@@ -72,7 +72,7 @@ class CrossCLR_Modality_loss(nn.Module):
     """
 
     def __init__(self, temperature=0.02, negative_weight=0.8, logger=None, config=None):
-        super(CrossCLR_Modality_loss).__init__()
+        super(CrossCLR_Modality_loss, self).__init__()
         self.logit_scale = nn.Parameter(torch.ones([]))
         self.criterion = torch.nn.CrossEntropyLoss(reduction='none')
         self.temperature = temperature

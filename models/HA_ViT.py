@@ -197,9 +197,9 @@ class HA_ViT(nn.Module):
     """
 
     """
-    def __init__(self, img_size=112, patch_size=8, in_chans=3, embed_dim=1024, num_classes_list=(3609, 7, 2),
+    def __init__(self, img_size=112, patch_size=8, in_chans=3, embed_dim=1024, num_classes_list=(2239, 7, 2),
                  layer_depth=12, num_heads=12, mlp_ratio=4., norm_layer=None, drop_rate=0., attn_drop_rate=0.,
-                 drop_path_rate=0., reuse_classifier=True):
+                 drop_path_rate=0.):
         super().__init__()
         self.embed_dim = embed_dim  # num_features for consistency with other models
         self.num_tokens = len(num_classes_list)
@@ -234,22 +234,15 @@ class HA_ViT(nn.Module):
                                  drop_path=dpr[i], act_layer=act_layer, norm_layer=norm_layer)
             for i in range(layer_depth)])
 
-        # Classifier head(s)
-        self.reuse_classifier = reuse_classifier
-        if self.reuse_classifier:
-            self.head = nn.ModuleList([
-                nn.Linear(self.embed_dim, num_classes) if num_classes > 0 else nn.Identity()
-                for num_classes in num_classes_list])
-        else:
-            # Face Classifier head(s)
-            self.head_face = nn.ModuleList([
-                nn.Linear(self.embed_dim, num_classes) if num_classes > 0 else nn.Identity()
-                for num_classes in num_classes_list])
+        # Face Classifier head(s)
+        self.head_face = nn.ModuleList([
+            nn.Linear(self.embed_dim, num_classes) if num_classes > 0 else nn.Identity()
+            for num_classes in num_classes_list])
 
-            # Ocular Classifier head(s)
-            self.head_ocu = nn.ModuleList([
-                nn.Linear(self.embed_dim, num_classes) if num_classes > 0 else nn.Identity()
-                for num_classes in num_classes_list])
+        # Ocular Classifier head(s)
+        self.head_ocu = nn.ModuleList([
+            nn.Linear(self.embed_dim, num_classes) if num_classes > 0 else nn.Identity()
+            for num_classes in num_classes_list])
 
     def forward_patch_embed(self, x, mode):  # mode = "face" or "ocular"
         cls_token = self.cls_token.expand(x.shape[0], -1, -1)
@@ -280,19 +273,13 @@ class HA_ViT(nn.Module):
         x_ocular = self.forward_features(x_ocular)
 
         y_face, y_ocular = [], []
-        if self.reuse_classifier:
-            for i, clf_head in enumerate(self.head):
-                y_face.append(clf_head(x_face[:, i]))
-            for i, clf_head in enumerate(self.head):
-                y_ocular.append(clf_head(x_ocular[:, i]))
-        else:
-            for i, clf_head in enumerate(self.head_face):
-                y_face.append(clf_head(x_face[:, i]))
-            for i, clf_head in enumerate(self.head_ocu):
-                y_ocular.append(clf_head(x_ocular[:, i]))
+        for i, clf_head in enumerate(self.head_face):
+            y_face.append(clf_head(x_face[:, i]))
+        for i, clf_head in enumerate(self.head_ocu):
+            y_ocular.append(clf_head(x_ocular[:, i]))
 
         if return_feature:
-            return x_face[:, 0], x_ocular[:, 0], y_face, y_ocular
+            return x_face[:, :self.num_tokens], x_ocular[:, :self.num_tokens], y_face, y_ocular
         else:
             return y_face, y_ocular
 
@@ -316,5 +303,5 @@ if __name__ == "__main__":
     input_2 = torch.rand(1, 2, 3, 112, 112).to(DEVICE)  # ocular
     model = HA_ViT(img_size=112, patch_size=8, in_chans=3, embed_dim=1024, num_classes_list=(2239, 7, 2),
                    layer_depth=6, num_heads=8, mlp_ratio=4., norm_layer=None, drop_rate=0., attn_drop_rate=0.,
-                   drop_path_rate=0., reuse_classifier=False).to(DEVICE)
+                   drop_path_rate=0.).to(DEVICE)
     print("Total Params: {:.2f}M".format(count_params(model) / 1000000))

@@ -63,6 +63,8 @@ class CMFP_dataset(torch.utils.data.Dataset):
 
     def __getitem__(self, idx):
         subject = self.subject[idx]
+        ethnic = self.ethnic[idx]
+        gender = self.gender[idx]
 
         if self.train_augmentation:
             # Face images
