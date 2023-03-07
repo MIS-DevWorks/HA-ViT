@@ -18,6 +18,7 @@ def parse_arguments(argv):
     :param argv: --dataset_mode {"ShapeNet", "Ours"}
     """
     parser = argparse.ArgumentParser()
+    parser.add_argument('--training_mode', help='Train the mode.', default=True)
     parser.add_argument('--dataset_mode', help='Dataset for evaluation. {CMFP_dataset}', default='CMFP_dataset')
 
     return parser.parse_args(argv)
@@ -41,8 +42,7 @@ def training():
                    num_classes_list=(config.num_sub_classes, config.num_enth_classes, config.num_gender_classes),
                    layer_depth=config.layer_depth, num_heads=config.num_heads, mlp_ratio=config.mlp_ratio,
                    norm_layer=None, drop_rate=config.drop_rate, attn_drop_rate=config.attn_drop_rate,
-                   drop_path_rate=config.drop_path_rate, network_type=config.network_type,
-                   reuse_classifier=config.reuse_classifier).to(config.device)
+                   drop_path_rate=config.drop_path_rate, reuse_classifier=config.reuse_classifier).to(config.device)
     if config.optimizer == "SGD":
         optimizer = torch.optim.SGD(model.parameters(), lr=config.init_lr, momentum=config.momentum,
                                     weight_decay=config.weight_decay)
