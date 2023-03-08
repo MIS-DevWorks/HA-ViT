@@ -2,9 +2,10 @@ from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 import os
 import argparse
+import sys
 
 from models.HA_ViT import HA_ViT
-from utils.CMFP_dataset import CMFP_dataset
+from utils.dataset import CMFP_dataset, other_dataset
 from utils.loss import total_LargeMargin_CrossEntropy, CrossCLR_Modality_loss
 from utils.model_utils import *
 import config as config
@@ -12,19 +13,22 @@ import config as config
 
 def parse_arguments(argv):
     """
-        Parameters for calling eval.py
-        e.g., python eval.py --dataset_mode "ShapeNet"
+        Parameters for calling main.py
+        e.g., python main.py --training_mode True --pretrain_mode False --dataset_mode "CMFP_dataset"
 
-    :param argv: --dataset_mode {"ShapeNet", "Ours"}
+    :param argv: --training_mode True
+    :param argv: --pretrain_mode False
+    :param argv: --dataset_mode "CMFP_dataset"
     """
     parser = argparse.ArgumentParser()
-    parser.add_argument('--training_mode', help='Train the mode.', default=True)
-    parser.add_argument('--dataset_mode', help='Dataset for evaluation. {CMFP_dataset}', default='CMFP_dataset')
+    parser.add_argument('--training_mode', help='Train the mode.', default=False)
+    parser.add_argument('--pretrain_mode', help='Use pretrained model weight.', default=False)
+    parser.add_argument('--dataset_mode', help='Dataset for training or evaluation.', default='other')
 
     return parser.parse_args(argv)
 
 
-def training():
+def training(args):
     cur_acc_dict = {
         "face": {"subject": 0., "ethnic": 0., "gender": 0.},
         "ocu": {"subject": 0., "ethnic": 0., "gender": 0.}
@@ -33,8 +37,9 @@ def training():
     os.makedirs(config.save_dir + "/checkpoints", exist_ok=True)
 
     # Dataset
-    train_dataset = CMFP_dataset(config, dataset_mode="train", train_augmentation=True, imagesize=config.image_size)
-    valid_dataset = CMFP_dataset(config, dataset_mode="valid", train_augmentation=False, imagesize=config.image_size)
+    if args.dataset_mode == "CMFP":
+        train_dataset = CMFP_dataset(config, dataset_mode="train", train_augmentation=True, imagesize=config.image_size)
+        valid_dataset = CMFP_dataset(config, dataset_mode="valid", train_augmentation=False, imagesize=config.image_size)
 
     # Model
     model = HA_ViT(img_size=config.image_size, patch_size=config.patch_size, in_chans=config.in_chans,
@@ -60,7 +65,7 @@ def training():
     loss_cm_gend = CrossCLR_Modality_loss(temperature=config.temperature, negative_weight=config.negative_weight,
                                           config=config).to(config.device)
 
-    if config.pretrained_weights is not None:
+    if args.pretrain_mode is True:
         print("Loading Pretrained Model")
         model.load_state_dict(torch.load(config.pretrained_weights, map_location=config.device), strict=True)
     
@@ -89,12 +94,64 @@ def training():
         print("    [BEST] acc: {}".format(cur_acc_dict))
         
 
-def crossmodal_evaluation():
-    pass
+def crossmodal_evaluation(args):
+    if args.dataset_mode == "CMFP":
+        pass
+    elif args.dataset_mode == "other":
+        print("-------------------------------------------------------------------------------------")
+        print("\tDataset Loading")
+        # Dataset
+        base_dataset = other_dataset(config, train_augmentation=False, imagesize=config.image_size)
+        test_dataset = other_dataset(config, train_augmentation=False, imagesize=config.image_size)
 
-if  __name__ == "__main__":
-    # training()
-    crossmodal_evaluation()
-    
-    
+        base_data_loader = DataLoader(base_dataset, batch_size=config.batch_size, shuffle=False, num_workers=2)
+        test_data_loader = DataLoader(test_dataset, batch_size=config.batch_size, shuffle=False, num_workers=2)
+        print("-------------------------------------------------------------------------------------\n\n")
+
+        print("-------------------------------------------------------------------------------------")
+        print("\tHA-ViT Model")
+        # Model
+        model = HA_ViT(img_size=config.image_size, patch_size=config.patch_size, in_chans=config.in_chans,
+                       embed_dim=config.embed_dim,
+                       num_classes_list=(config.num_sub_classes, config.num_enth_classes, config.num_gender_classes),
+                       layer_depth=config.layer_depth, num_heads=config.num_heads, mlp_ratio=config.mlp_ratio,
+                       norm_layer=None, drop_rate=config.drop_rate, attn_drop_rate=config.attn_drop_rate,
+                       drop_path_rate=config.drop_path_rate).to(config.device)
+        if config.pretrained_weights is not None:
+            print("\n\tLoading Pretrained Model: {}".format(config.pretrained_weights))
+            model.load_state_dict(torch.load(config.pretrained_weights, map_location=config.device), strict=True)
+        print("-------------------------------------------------------------------------------------\n\n")
+
+        print("-------------------------------------------------------------------------------------")
+        print("\tIdentifying...")
+        base_data_features_dict = get_features(model, base_data_loader, config)
+        test_data_features_dict = get_features(model, test_data_loader, config)
+
+        ''' base face vs test ocu '''
+        face_ocu_acc_by_max = evaluate_crossmodal_data_features_dict(base_data=base_data_features_dict[0],
+                                                                     test_data=test_data_features_dict[1],
+                                                                     base_gt=base_data_features_dict[2],
+                                                                     test_gt=test_data_features_dict[2],
+                                                                     method='max')
+        print("\t[TEST] Cross-identification(face to periocular) accuracy    : {:.2f}%".format(face_ocu_acc_by_max))
+
+        ''' base ocu vs test face '''
+        ocu_face_acc_by_max = evaluate_crossmodal_data_features_dict(base_data=base_data_features_dict[1],
+                                                                     test_data=test_data_features_dict[0],
+                                                                     base_gt=base_data_features_dict[2],
+                                                                     test_gt=test_data_features_dict[2],
+                                                                     method='max')
+        print("\t[TEST] Cross-identification(periocular to face) accuracy    : {:.2f}%".format(ocu_face_acc_by_max))
+        print("-------------------------------------------------------------------------------------\n")
+
+
+def main(args):
+    if args.training_mode is True:
+        training(args=args)
+    elif args.training_mode is False:
+        crossmodal_evaluation(args=args)
+
+
+if __name__ == "__main__":
+    main(parse_arguments(sys.argv[1:]))
     

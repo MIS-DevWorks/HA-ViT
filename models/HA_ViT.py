@@ -297,7 +297,6 @@ def count_params(model):
 if __name__ == "__main__":
     import sys
 
-    # DEVICE = "cuda:0"
     DEVICE = "cpu"
     input_1 = torch.rand(1, 1, 3, 112, 112).to(DEVICE)  # face
     input_2 = torch.rand(1, 2, 3, 112, 112).to(DEVICE)  # ocular

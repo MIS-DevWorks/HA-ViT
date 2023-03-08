@@ -2,10 +2,10 @@ from datetime import datetime
 
 
 #   Path
-dataset_path                            = '/media/leslie/samsung/Biometrics/learning dataset/'
+dataset_path_CMFP                       = '/media/leslie/samsung/Biometrics/learning dataset/'
+dataset_path_other                      = 'Sample Images/'
 save_dir                                = 'experiments/{}'.format(datetime.now().strftime("%Y%m%d_%H%M%S"))
-pretrained_weights                      = './checkpoints/HA-ViT.pt'
-pretrained                              = False
+pretrained_weights                      = 'Pre-trained model/HA-ViT.pt'
 
 
 #   Image

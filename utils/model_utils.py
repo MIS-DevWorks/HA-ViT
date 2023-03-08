@@ -116,6 +116,36 @@ def valid(data_loader, model, loss_fn, loss_fn2, epoch, writer, config):
     return total_loss, val_acc_dict
 
 
+def get_features(model, data_loader, config):
+    model.eval()
+    subject_ids = []
+
+    for i, (inputs, inputs2, targets) in enumerate(tqdm(data_loader)):
+        with torch.no_grad():
+            subject_face_features = model.forward_patch_embed(inputs.to(config.device), mode="face")
+            subject_face_features = model.forward_features(subject_face_features)[:, 0, :]
+
+            subject_ocular_features = model.forward_patch_embed(inputs2.to(config.device), mode="ocular")
+            subject_ocular_features = model.forward_features(subject_ocular_features)[:, 0, :]
+
+        subject_ids.extend(targets)
+        for j, feature in enumerate(subject_face_features):
+            if i == 0 and j == 0:
+                subject_face_features_tensor = torch.unsqueeze(feature.detach(), dim=0)
+            else:
+                subject_face_features_tensor = torch.cat(
+                    (subject_face_features_tensor, torch.unsqueeze(feature.detach(), dim=0)), dim=0)
+
+        for j, feature in enumerate(subject_ocular_features):
+            if i == 0 and j == 0:
+                subject_ocular_features_tensor = torch.unsqueeze(feature.detach(), dim=0)
+            else:
+                subject_ocular_features_tensor = torch.cat(
+                    (subject_ocular_features_tensor, torch.unsqueeze(feature.detach(), dim=0)), dim=0)
+
+    return subject_face_features_tensor, subject_ocular_features_tensor, torch.tensor(subject_ids)
+
+
 def evaluate_crossmodal_data_features_dict(base_data, test_data, base_gt, test_gt, method="max"):
     total_true_preds = 0
     cos_sim_score_list = []
@@ -130,4 +160,4 @@ def evaluate_crossmodal_data_features_dict(base_data, test_data, base_gt, test_g
         else:
             raise "{} is not implemented yet".format(method)
 
-    return total_true_preds / len(test_data)
+    return (total_true_preds / len(test_data)) * 100.
