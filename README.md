@@ -24,7 +24,11 @@ We tested the codes with:
 ### Usage
 - Run the code `main.py` with the given configuration in config.py
 ```shell
-$ python main.py --training_mode True --pretrain_mode False --dataset_mode "CMFP"
+$ python main.py --training_mode True --pretrain_mode False --dataset_mode 'CMFP'
+```
+- Evaluate the model with the given test sample
+```shell
+$ python main.py --training_mode False --dataset_mode 'other'
 ```
 
 
@@ -38,7 +42,7 @@ This work is an open-source under MIT license.
 
 ### Cite this work
 ```
-@article{HA-ViT2023,
+@article{HAViT2023,
     author    = {Tiong, Leslie Ching Ow and Sigmund, Dick and Teoh, Andrew Beng Jin},
     title     = {Face-Periocular Cross-Identification via Contrastive Hybrid Attention Vision Transformer},
     year      = {2023}
