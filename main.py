@@ -14,7 +14,7 @@ import config as config
 def parse_arguments(argv):
     """
         Parameters for calling main.py
-        e.g., python main.py --training_mode True --pretrain_mode False --dataset_mode "CMFP_dataset"
+        e.g., python main.py --training_mode True --pretrain_mode False --dataset_mode "CMFP"
 
     :param argv: --training_mode True
     :param argv: --pretrain_mode False
