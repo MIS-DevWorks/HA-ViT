@@ -26,7 +26,7 @@ We tested the codes with:
 ```shell
 $ python main.py --training_mode True --pretrain_mode False --dataset_mode 'CMFP'
 ```
-- Evaluate the model with the given test sample
+- Evaluate the model with the given test sample (see Sample Images.zip)
 ```shell
 $ python main.py --training_mode False --dataset_mode 'other'
 ```
