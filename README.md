@@ -45,6 +45,7 @@ This work is an open-source under MIT license.
 @article{HAViT2023,
     author    = {Tiong, Leslie Ching Ow and Sigmund, Dick and Teoh, Andrew Beng Jin},
     title     = {Face-Periocular Cross-Identification via Contrastive Hybrid Attention Vision Transformer},
+    journal   = {IEEE Signal Processing Letters},
     year      = {2023}
 }
 ```
