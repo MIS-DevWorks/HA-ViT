@@ -1,19 +1,13 @@
 # Contrastive Hybrid Attention Vision Transformer (HA-ViT)
 
 ### Introduction
-This repository contains the source code for the paper [Face-Periocular Cross-Identification via Contrastive Hybrid Attention Vision Transformer], which is accepted by IEEE Signal Processing Letters.
+This repository contains the source code for one of the main contributions in this paper [Face-Periocular Cross-Identification via Contrastive Hybrid Attention Vision Transformer], which is accepted by IEEE Signal Processing Letters.
 
 
 ### Dataset
 We use the Cross-modal Face-periocular Dataset to train the proposed model, which are available as follows:
 - [Cross-modal Face-periocular](https://www.kaggle.com/datasets/leslietiong/cmfpdb)
 
-
-### Compatibility
-We tested the codes with:
-  1) PyTorch &ge; 1.12.0 with and without GPU under Ubuntu 18.04 and Anaconda3 (Python 3.8 and above)
-  2) PyTorch &ge; 1.10.2 with and without GPU under Windows 10 and Anaconda3 (Python 3.7 and above)
-  
 
 ### Requirements
   1) [Anaconda3](https://www.anaconda.com/distribution/#download-section)
@@ -30,6 +24,11 @@ $ python main.py --training_mode True --pretrain_mode False --dataset_mode 'CMFP
 ```shell
 $ python main.py --training_mode False --dataset_mode 'other'
 ```
+
+### Compatibility
+We tested the codes with:
+  1) PyTorch &ge; 1.12.0 with and without GPU under Ubuntu 18.04 and Anaconda3 (Python 3.8 and above)
+  2) PyTorch &ge; 1.10.2 with and without GPU under Windows 10 and Anaconda3 (Python 3.7 and above)
 
 
 ### Pretrained Model
