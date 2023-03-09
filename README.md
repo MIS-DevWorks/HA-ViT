@@ -11,8 +11,8 @@ We use the Cross-modal Face-periocular Dataset to train the proposed model, whic
 
 ### Compatibility
 We tested the codes with:
-  1) PyTorch 1.12.0 with and without GPU under Ubuntu 18.04 and Anaconda3 (Python 3.8 and above)
-  2) PyTorch 1.10.2 with and without GPU under Windows 10 and Anaconda3 (Python 3.7 and above)
+  1) PyTorch &ge; 1.12.0 with and without GPU under Ubuntu 18.04 and Anaconda3 (Python 3.8 and above)
+  2) PyTorch &ge; 1.10.2 with and without GPU under Windows 10 and Anaconda3 (Python 3.7 and above)
   
 
 ### Requirements
