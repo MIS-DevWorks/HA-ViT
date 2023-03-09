@@ -6,7 +6,7 @@ import sys
 
 from models.HA_ViT import HA_ViT
 from utils.dataset import CMFP_dataset, other_dataset
-from utils.loss import total_LargeMargin_CrossEntropy, CrossCLR_Modality_loss
+from utils.loss import total_LargeMargin_CrossEntropy, CFPC_loss
 from utils.model_utils import *
 import config as config
 
@@ -21,9 +21,9 @@ def parse_arguments(argv):
     :param argv: --dataset_mode "CMFP_dataset"
     """
     parser = argparse.ArgumentParser()
-    parser.add_argument('--training_mode', help='Train the mode.', default=False)
+    parser.add_argument('--training_mode', help='Train the mode.', default=True)
     parser.add_argument('--pretrain_mode', help='Use pretrained model weight.', default=False)
-    parser.add_argument('--dataset_mode', help='Dataset for training or evaluation.', default='other')
+    parser.add_argument('--dataset_mode', help='Dataset for training or evaluation.', default='CMFP')
 
     return parser.parse_args(argv)
 
@@ -38,9 +38,16 @@ def training(args):
 
     # Dataset
     if args.dataset_mode == "CMFP":
+        print("-------------------------------------------------------------------------------------")
+        print("\tDataset Loading")
         train_dataset = CMFP_dataset(config, dataset_mode="train", train_augmentation=True, imagesize=config.image_size)
         valid_dataset = CMFP_dataset(config, dataset_mode="valid", train_augmentation=False, imagesize=config.image_size)
+        print("-------------------------------------------------------------------------------------\n\n")
+    else:
+        raise ValueError("'{}' dataset is not found!".format(args.dataset_mode))
 
+    print("-------------------------------------------------------------------------------------")
+    print("\tHA-ViT Model")
     # Model
     model = HA_ViT(img_size=config.image_size, patch_size=config.patch_size, in_chans=config.in_chans,
                    embed_dim=config.embed_dim,
@@ -58,21 +65,26 @@ def training(args):
     loss_ethn = total_LargeMargin_CrossEntropy().to(config.device)
     loss_gend = total_LargeMargin_CrossEntropy().to(config.device)
 
-    loss_cm_subj = CrossCLR_Modality_loss(temperature=config.temperature, negative_weight=config.negative_weight,
-                                          config=config).to(config.device)
-    loss_cm_ethn = CrossCLR_Modality_loss(temperature=config.temperature, negative_weight=config.negative_weight,
-                                          config=config).to(config.device)
-    loss_cm_gend = CrossCLR_Modality_loss(temperature=config.temperature, negative_weight=config.negative_weight,
-                                          config=config).to(config.device)
+    loss_cm_subj = CFPC_loss(temperature=config.temperature, negative_weight=config.negative_weight,
+                             config=config).to(config.device)
+    loss_cm_ethn = CFPC_loss(temperature=config.temperature, negative_weight=config.negative_weight,
+                             config=config).to(config.device)
+    loss_cm_gend = CFPC_loss(temperature=config.temperature, negative_weight=config.negative_weight,
+                             config=config).to(config.device)
 
     if args.pretrain_mode is True:
-        print("Loading Pretrained Model")
+        print("\n\tLoading Pretrained Model: {}".format(config.pretrained_weights))
         model.load_state_dict(torch.load(config.pretrained_weights, map_location=config.device), strict=True)
+    else:
+        print("\n\tLoading Pretrained Model is set to False")
     
     # Training
     train_data_loader = DataLoader(train_dataset, batch_size=config.batch_size, shuffle=True, num_workers=2)
     valid_data_loader = DataLoader(valid_dataset, batch_size=config.batch_size, shuffle=False, num_workers=2)
+    print("-------------------------------------------------------------------------------------\n\n")
 
+    print("-------------------------------------------------------------------------------------")
+    print("\tTraining...")
     for epoch in range(config.start_epoch, config.total_epochs):
         print("[EPOCH {}/{}]".format(epoch, config.total_epochs - 1))
         train_loss, train_acc_dict = train(data_loader=train_data_loader, model=model,
@@ -92,6 +104,7 @@ def training(args):
         print("    [Train] loss: {:.4f}, \nacc: {}\n".format(train_loss, train_acc_dict))
         print("    [Valid] loss: {:.4f},\nacc: {}\n".format(valid_loss, valid_acc_dict))
         print("    [BEST] acc: {}".format(cur_acc_dict))
+    print("-------------------------------------------------------------------------------------\n")
         
 
 def crossmodal_evaluation(args):

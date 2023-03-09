@@ -30,7 +30,7 @@ drop_path_rate                          = 0.
 
 
 #   Training
-batch_size                              = 64
+batch_size                              = 4
 init_lr                                 = 0.0001
 optimizer                               = "AdamW"
 momentum                                = 0.9

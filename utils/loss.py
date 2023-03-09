@@ -6,17 +6,10 @@ import numpy as np
 
 
 class LargeMarginSoftmax(nn.CrossEntropyLoss):
-    r"""
+    """
     This combines the Softmax Cross-Entropy Loss (nn.CrossEntropyLoss) and the large-margin inducing
     regularization proposed in
        T. Kobayashi, "Large-Margin In Softmax Cross-Entropy Loss." In BMVC2019.
-
-    This loss function inherits the parameters from nn.CrossEntropyLoss except for `reg_lambda` and `deg_logit`.
-    Args:
-         reg_lambda (float, optional): a regularization parameter. (default: 0.3)
-         deg_logit (bool, optional): underestimate (degrade) the target logit by -1 or not. (default: False)
-                                     If True, it realizes the method that incorporates the modified loss into ours
-                                     as described in the above paper (Table 4).
     """
 
     def __init__(self, reg_lambda=0.3, deg_logit=None,
@@ -65,18 +58,18 @@ class total_LargeMargin_CrossEntropy(nn.Module):
         return total_loss
 
 
-class CrossCLR_Modality_loss(nn.Module):
+class CFPC_loss(nn.Module):
     """
-    CrossCLR Loss between 2 groups of embeddings - Only Intra Modality alignment
-    ICCV 2021
+    This combines the CrossCLR Loss proposed in
+       M. Zolfaghari et al., "CrossCLR: Cross-modal Contrastive Learning For Multi-modal Video Representations,"
+       In ICCV2021.
     """
 
-    def __init__(self, temperature=0.02, negative_weight=0.8, logger=None, config=None):
-        super(CrossCLR_Modality_loss, self).__init__()
+    def __init__(self, temperature=0.02, negative_weight=0.8, config=None):
+        super(CFPC_loss, self).__init__()
         self.logit_scale = nn.Parameter(torch.ones([]))
         self.criterion = torch.nn.CrossEntropyLoss(reduction='none')
         self.temperature = temperature
-        self.logger = logger
         self.config = config
         self.negative_w = negative_weight  # Weight of negative samples logits.
 
@@ -85,7 +78,7 @@ class CrossCLR_Modality_loss(nn.Module):
 
     def _get_positive_mask(self, batch_size):
         diag = np.eye(batch_size)
-        mask = torch.from_numpy((diag))
+        mask = torch.from_numpy(diag)
         mask = (1 - mask)
         return mask.to(self.config.device)
 
