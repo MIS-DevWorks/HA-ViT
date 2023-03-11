@@ -18,7 +18,7 @@ def parse_arguments(argv):
 
     :param argv: --training_mode True
     :param argv: --pretrain_mode False
-    :param argv: --dataset_mode "CMFP_dataset"
+    :param argv: --dataset_mode "CMFP"
     """
     parser = argparse.ArgumentParser()
     parser.add_argument('--training_mode', help='Train the mode.', action='store_true')
