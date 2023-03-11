@@ -14,15 +14,15 @@ import config as config
 def parse_arguments(argv):
     """
         Parameters for calling main.py
-        e.g., python main.py --training_mode True --pretrain_mode False --dataset_mode "CMFP"
+        e.g., python main.py --training_mode --dataset_mode "CMFP"
 
     :param argv: --training_mode True
     :param argv: --pretrain_mode False
     :param argv: --dataset_mode "CMFP_dataset"
     """
     parser = argparse.ArgumentParser()
-    parser.add_argument('--training_mode', help='Train the mode.', default=True)
-    parser.add_argument('--pretrain_mode', help='Use pretrained model weight.', default=False)
+    parser.add_argument('--training_mode', help='Train the mode.', action='store_true')
+    parser.add_argument('--pretrain_mode', help='Use pretrained model weight.', action='store_true')
     parser.add_argument('--dataset_mode', help='Dataset for training or evaluation.', default='CMFP')
 
     return parser.parse_args(argv)
@@ -108,6 +108,7 @@ def training(args):
         
 
 def crossmodal_evaluation(args):
+    print(args)
     if args.dataset_mode == "CMFP":
         pass
     elif args.dataset_mode == "other":
