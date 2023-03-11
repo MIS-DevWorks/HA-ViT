@@ -18,11 +18,11 @@ We use the Cross-modal Face-periocular Dataset to train the proposed model, whic
 ### Usage
 - Run the code `main.py` with the given configuration in config.py
 ```shell
-$ python main.py --training_mode True --pretrain_mode False --dataset_mode 'CMFP'
+$ python main.py --training_mode --dataset_mode 'CMFP'
 ```
 - Evaluate the model with the given test sample (see Sample Images.zip)
 ```shell
-$ python main.py --training_mode False --dataset_mode 'other'
+$ python main.py --dataset_mode 'other'
 ```
 
 ### Compatibility
