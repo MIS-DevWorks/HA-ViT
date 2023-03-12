@@ -284,16 +284,6 @@ class HA_ViT(nn.Module):
             return y_face, y_ocular
 
 
-def count_params(model):
-    p_p = 0
-    for p in list(model.parameters()):
-        n_n = 1
-        for s in list(p.size()):
-            n_n *= s
-        p_p += n_n
-    return p_p
-
-
 if __name__ == "__main__":
     import sys
 
@@ -303,4 +293,4 @@ if __name__ == "__main__":
     model = HA_ViT(img_size=112, patch_size=8, in_chans=3, embed_dim=1024, num_classes_list=(2239, 7, 2),
                    layer_depth=6, num_heads=8, mlp_ratio=4., norm_layer=None, drop_rate=0., attn_drop_rate=0.,
                    drop_path_rate=0.).to(DEVICE)
-    print("Total Params: {:.2f}M".format(count_params(model) / 1000000))
+    
