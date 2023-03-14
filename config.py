@@ -2,7 +2,7 @@ from datetime import datetime
 
 
 #   Path
-dataset_path_CMFP                       = 'dataset/'
+dataset_path_CMFP                       = 'dataset/CMFP'
 dataset_path_other                      = 'Sample Images/'
 save_dir                                = 'experiments/{}'.format(datetime.now().strftime("%Y%m%d_%H%M%S"))
 pretrained_weights                      = 'Pre-trained model/HA-ViT.pt'
