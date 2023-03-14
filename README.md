@@ -1,7 +1,7 @@
 # Contrastive Hybrid Attention Vision Transformer (HA-ViT)
 
 ### Introduction
-This repository contains the source code for one of the main contributions in this paper [Face-Periocular Cross-Identification via Contrastive Hybrid Attention Vision Transformer], which is accepted by IEEE Signal Processing Letters.
+This repository contains the source code for one of the main contributions in this paper [Face-Periocular Cross-Identification via Contrastive Hybrid Attention Vision Transformer](https://ieeexplore.ieee.org/document/10068230), which is accepted by IEEE Signal Processing Letters.
 
 
 ### Dataset
@@ -45,6 +45,7 @@ This work is an open-source under MIT license.
     author    = {Tiong, Leslie Ching Ow and Sigmund, Dick and Teoh, Andrew Beng Jin},
     title     = {Face-Periocular Cross-Identification via Contrastive Hybrid Attention Vision Transformer},
     journal   = {IEEE Signal Processing Letters},
+    doi       = {10.1109/LSP.2023.3256320},
     year      = {2023}
 }
 ```
