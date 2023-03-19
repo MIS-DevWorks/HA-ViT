@@ -32,7 +32,7 @@ We tested the codes with:
 
 
 ### Pretrained Model
-The pretrained model will be shared soon.
+The pretrained model can be found [here](https://drive.google.com/file/d/1N9US24HqEc1VypsILlJd8slX_fEP2rlK/view?usp=share_link).
 
 
 ### License
