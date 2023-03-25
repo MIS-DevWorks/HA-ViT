@@ -46,6 +46,8 @@ This work is an open-source under MIT license.
     title     = {Face-Periocular Cross-Identification via Contrastive Hybrid Attention Vision Transformer},
     journal   = {IEEE Signal Processing Letters},
     doi       = {10.1109/LSP.2023.3256320},
+    volume    = {30},
+    pages     = {254--258},
     year      = {2023}
 }
 ```
