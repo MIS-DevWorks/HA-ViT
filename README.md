@@ -10,9 +10,9 @@ We use the Cross-modal Face-periocular Dataset to train the proposed model, whic
 
 
 ### Requirements
-  1) [Anaconda3](https://www.anaconda.com/distribution/#download-section)
-  2) [PyTorch](https://pytorch.org/get-started/locally/)
-  3) [Natsort](https://pypi.org/project/natsort/)
+  1) [Anaconda3](https://www.anaconda.com/download)
+  2) [PyTorch](https://pytorch.org/get-started/locally)
+  3) [Natsort](https://pypi.org/project/natsort)
 
 
 ### Usage
