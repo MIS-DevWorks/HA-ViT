@@ -1,16 +1,16 @@
 <h1 align="center">
-  Face-Periocular Cross-Identification via Contrastive Hybrid Attention Vision Transformer
+    Face-Periocular Cross-Identification via Contrastive Hybrid Attention Vision Transformer
 </h1>
 <p align="center">
-  Leslie Ching Ow Tiong<sup>1</sup>,  Dick Sigmund<sup>2</sup>, Andrew Beng Jin Teoh<sup>&dagger;,3</sup>
-  <br/>
-  <sup>1</sup>Korea Institute of Science and Technology, <sup>2</sup>AIDOT Inc., <sup>3</sup>Yonsei University
-  <br/>
-  <sup>&dagger;</sup>Corresponding author
-  <br/><br/>
-  <a href="https://ieeexplore.ieee.org/document/10068230">
-    <img src="https://img.shields.io/badge/paper-link-blue.svg" alt="Paper Link">
-  </a>
+    Leslie Ching Ow Tiong<sup>1</sup>,  Dick Sigmund<sup>2</sup>, Andrew Beng Jin Teoh<sup>&dagger;,3</sup>
+    <br/>
+    <sup>1</sup>Korea Institute of Science and Technology, <sup>2</sup>AIDOT Inc., <sup>3</sup>Yonsei University
+    <br/>
+    <sup>&dagger;</sup>Corresponding author
+    <br/><br/>
+    <a href="https://ieeexplore.ieee.org/document/10068230">
+        <img src="https://img.shields.io/badge/paper-link-blue.svg" alt="Paper Link">
+    </a>
 </p>
 <br/> <br/>
 
