@@ -16,7 +16,7 @@
 
 
 ## Introduction
-This repository contains the source code for one of the main contributions in this paper [Face-Periocular Cross-Identification via Contrastive Hybrid Attention Vision Transformer](https://ieeexplore.ieee.org/document/10068230), which is accepted by IEEE Signal Processing Letters.
+This repository contains the source code for one of the main contributions in this paper [Face-Periocular Cross-Identification via Contrastive Hybrid Attention Vision Transformer](https://ieeexplore.ieee.org/document/10068230), which is accepted by **IEEE Signal Processing Letters**.
 <br/> <br/>
 
 
