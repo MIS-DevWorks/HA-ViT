@@ -8,7 +8,7 @@
   <br/>
   <sup>&dagger;</sup>Corresponding author
   <br/><br/>
-  <a href="<https://ieeexplore.ieee.org/document/10068230>">
+  <a href="https://ieeexplore.ieee.org/document/10068230">
     <img src="https://img.shields.io/badge/paper-link-blue.svg" alt="Paper Link">
   </a>
 </p>
